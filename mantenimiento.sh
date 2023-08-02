@@ -524,7 +524,7 @@ while true; do
         13) desactivar_usuario ;;
         14) eliminar_usuario ;;
         15) crear_grupo ;;
-		16) listar_grupos ;;
+	 16) listar_grupos ;;
         17) eliminar_grupo ;;
         18) asignar_usuarios_a_grupo ;;
         19) crear_usuarios_desde_archivo ;;
