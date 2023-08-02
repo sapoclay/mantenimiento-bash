@@ -260,8 +260,8 @@ function matar_proceso() {
 # Función para listar los usuarios del sistema
 function listar_usuarios() {
 	clear
-    cabecera "${negrita}${amarillo}Listar usuarios del sistema${normal}"
-    cut -d: -f1 /etc/passwd
+    cabecera "Listar usuarios del sistema"
+    cut -d: -f1 /etc/passwd | more 
 }
 
 # Función para crear un usuario
@@ -340,7 +340,7 @@ function listar_grupos() {
 	clear
     cabecera "Listar grupos del sistema"
 	echo "${negrita}${amarillo}Grupos encontrados en el sistema:${normal}"
-    cut -d: -f1 /etc/group
+    cut -d: -f1 /etc/group | more
 }
 
 # Función para eliminar un grupo
@@ -426,9 +426,13 @@ function informacion_sistema() {
     
     # Verificar si se tienen los permisos de sudo
     if sudo -n true 2>/dev/null; then
+        echo ""
         echo "${negrita}${verde}-- Tienes permisos de root para acceder a la información del sistema --${normal}"
+        echo ""
     else
+        echo ""
         echo "${negrita}${rojo}-- Esta tarea requiere permisos de root --${normal}"
+        echo ""
         return
     fi
     
