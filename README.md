@@ -25,10 +25,10 @@ Vamos a crear un script bash de mantenimiento con las siguientes funciones media
 - Asignar usuarios a grupos
 - Crear usuarios leyendo sus nombres de un archivo de texto. El archivo de texto debe ser indicado por el usuario
 - Mostrar información del sistema con la siguiente salida:
-    -id del vendedor
-    -nombre del modelo
-    -CPU MHZ
-    -Memoria total
-    -Memoria libre
-    -Arquitectura
-    -Versión del kernel
+    * id del vendedor
+    * nombre del modelo
+    * CPU MHZ
+    * Memoria total
+    * Memoria libre
+    * Arquitectura
+    * Versión del kernel
