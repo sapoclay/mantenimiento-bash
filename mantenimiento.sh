@@ -1,12 +1,62 @@
 #!/bin/bash
 
-# Colores 
+# Colores y estilo para el menú
 verde=$(tput setaf 2)   # Color verde
 rojo=$(tput setaf 1)     # Color rojo
 amarillo=$(tput setaf 3)   # Color amarillo
 azul=$(tput setaf 4)     # Color azul
 normal=$(tput sgr0)      # Restaurar color por defecto
 negrita=$(tput bold)     # Texto en negrita
+
+# Función para comprobar y, si es necesario, instalar la dependencia tput
+function verificar_tput() {
+      if ! command -v tput &>/dev/null; then
+
+        echo -n "${amarillo}La herramienta 'tput' no está instalada. Instalando."
+        for _ in {1..3}; do
+            echo -n " . "
+            sleep 1
+        done
+        echo "${normal}"
+        if [[ "$(uname)" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y ncurses-bin
+        else
+            clear
+            echo
+            echo "${amarillo}Comprobando dependencias. "
+            for _ in {1..3}; do
+                echo -n " . "
+                sleep 1
+            done
+            echo "${rojo}No se pudo detectar el sistema operativo. Por favor, instala 'tput' manualmente o no se verán los colores.${normal}"
+            sleep 3
+            exit 1
+        fi
+
+        clear
+        echo -n "${amarillo}Comprobando dependencias."
+        for _ in {1..3}; do
+            echo -n " . "
+            sleep 1
+        done
+        echo "${normal}"
+        echo "${verde}¡'tput' se ha instalado correctamente!${normal}"
+        sleep 3
+    else
+        clear
+        echo -n "${amarillo}Comprobando dependencias."
+        for _ in {1..3}; do
+            echo -n " . "
+            sleep 1
+        done
+        echo "${normal}"
+        echo "${verde}¡Todas las dependencias necesarias para una correcta visualización están instaladas en el sistema!${normal}"
+        sleep 3
+    fi
+}
+# Llamada a la función verificar_tput para comprobar si tput está instalado
+verificar_tput
 
 # Función para mostrar la cabecera
 function cabecera() {
@@ -373,22 +423,29 @@ function crear_usuarios_desde_archivo() {
 function informacion_sistema() {
     clear
     cabecera "Información del sistema"
-    echo "${negrita}${amarillo}ID del vendedor: ${normal} $(sudo dmidecode -s system-manufacturer)"
-    echo "${negrita}${amarillo}Nombre del modelo: ${normal} $(sudo dmidecode -s system-product-name)"
-
+    echo ""
+    echo "${negrita}${amarillo}- ID del vendedor: ${normal} $(sudo dmidecode -s system-manufacturer)"
+    echo ""
+    echo "${negrita}${amarillo}- Nombre del modelo: ${normal} $(sudo dmidecode -s system-product-name)"
+    echo ""
     # Obtener la frecuencia de la CPU utilizando cat /proc/cpuinfo
     cpu_mhz=$(cat /proc/cpuinfo | grep "cpu MHz" | head -n 1 | awk '{print $4}')
     if [ -z "$cpu_mhz" ]; then
-        echo "${negrita}${rojo}No se pudo obtener la frecuencia de la CPU.${normal}"
+        echo "${negrita}${rojo}- No se pudo obtener la frecuencia de la CPU.${normal}"
     else
-        echo "${negrita}${amarillo}CPU MHz: ${normal} $cpu_mhz"
+        echo "${negrita}${amarillo}- CPU MHz: ${normal} $cpu_mhz"
     fi
-
-    echo "${negrita}${amarillo}Memoria total: ${normal} $(free -h | grep "Mem" | awk '{print $2}')"
-    echo "${negrita}${amarillo}Memoria libre: ${normal} $(free -h | grep "Mem" | awk '{print $7}')"
-    echo "${negrita}${amarillo}Arquitectura: ${normal} $(uname -m)"
-    echo "${negrita}${amarillo}Versión del kernel: ${normal} $(uname -r)"
+    echo ""
+    echo "${negrita}${amarillo}- Memoria total: ${normal} $(free -h | grep "Mem" | awk '{print $2}')"
+    echo ""
+    echo "${negrita}${amarillo}- Memoria libre: ${normal} $(free -h | grep "Mem" | awk '{print $7}')"
+    echo ""
+    echo "${negrita}${amarillo}- Arquitectura: ${normal} $(uname -m)"
+    echo ""
+    echo "${negrita}${amarillo}- Versión del kernel: ${normal} $(uname -r)"
 }
+
+
 
 # Menú principal
 while true; do
