@@ -1,5 +1,34 @@
 #!/bin/bash
 
+# Vamos a crear un script bash de mantenimiento con las siguientes funciones mediante la interacción del usario que permita;
+# al usuario seleccion un directorio para listar su contenido
+# crear un fichero en un directorio que seleccione el usuario. Indicando también el nombre
+# leer un fichero que indique el usuario
+# editar un fichero. En caso de que no exista se muestra un error
+# copiar un fichero indicado por el usuario de un directorio a otro
+# mover un fichero indicado por el usuario de un directorio a otro
+# eliminar ficheros indicados por el usuario
+# mostrar permisos de un fichero o directorio concreto
+# instalar un paquete determinado (primero hay que buscarlo en los repositorios, y si el paquete existe se instala, sino se muestra un error)
+# matar un proceso seleccionado por el usuario
+# listar los usuarios del sistema
+# crear un usuario
+# desactivar un usuario
+# eliminar un usuario
+# crear un grupo
+# listar los usuarios del sistema
+# eliminar un grupo
+# asignar usuarios a grupos
+# crear usuarios leyendo sus nombres de un archivo de texto. El archivo de texto debe ser indicado por el usuario
+# información del sistema con la siguiente salida:
+# id del vendedor
+# nombre del modelo
+# CPU MHZ
+# Memoria total
+# Memoria libre
+# Arquitectura
+# Versión del kernel
+
 # Colores y estilo para el menú
 verde=$(tput setaf 2)   # Color verde
 rojo=$(tput setaf 1)     # Color rojo
@@ -76,7 +105,8 @@ function listar_contenido_directorio() {
         echo "${negrita}${rojo}El directorio \"$directorio\" no existe. La operación ha sido abortada.${normal}"
         return
     fi
-
+    
+    # Lista el contenido del directorio sin ocular las entradas que comienzan con . utilizando formato largo
     ls -la "$directorio"
 }
 
@@ -94,8 +124,9 @@ function crear_fichero() {
 
     read -p "${negrita}${amarillo}Escribe el nombre del fichero: ${normal}" nombre_fichero
 
+    # Crea el archivo en el directorio indicado
     touch "$directorio/$nombre_fichero"
-    echo "Fichero creado: $directorio/$nombre_fichero"
+    echo "${negrita}${verde}Fichero creado: ${normal} $directorio/$nombre_fichero"
 }
 
 # Función para leer un fichero indicado por el usuario
@@ -142,6 +173,7 @@ function copiar_fichero() {
         return
     fi
 
+    # Copia el archivo en el destino indicado
     cp "$origen" "$destino"
     echo "${negrita}${verde}Fichero copiado a $destino${normal}"
 }
@@ -166,7 +198,7 @@ function mover_fichero() {
         return
     fi
 
-    # Con -i se sobreescribe el detino, en caso de existir
+    # Con -i se sobreescribe el detino, en caso de existir (sin probar)
     mv -i "$origen" "$destino"
     echo "${negrita}${verde}Fichero movido a $destino${normal}"
 }
@@ -206,6 +238,8 @@ function mostrar_permisos() {
 	clear
     cabecera "Mostrar permisos de un fichero o directorio"
     read -p "${negrita}${amarillo}Escribe la ruta del fichero o directorio: ${normal}" ruta
+    
+    # Lista los directorios (no su contenido) en formato largo
     ls -ld "$ruta"
 }
 
@@ -261,14 +295,23 @@ function matar_proceso() {
 function listar_usuarios() {
 	clear
     cabecera "Listar usuarios del sistema"
+    # Listado de los usuarios del sistema
     cut -d: -f1 /etc/passwd | more 
 }
 
 # Función para crear un usuario
 function crear_usuario() {
-	clear
+    clear
     cabecera "Crear un usuario"
-    read -p "${negrita}${amarillo}Escribe el nombre del usuario que quieres crear: {normal}" usuario
+    read -p "${negrita}${amarillo}Escribe el nombre del usuario que quieres crear: ${normal}" usuario
+
+    # Verificar si el usuario ya existe en el sistema
+    if getent passwd "$usuario" >/dev/null; then
+        echo "${negrita}${rojo}El usuario \"$usuario\" ya existe en el sistema. La creación del usuario ha sido abortada.${normal}"
+        return
+    fi
+
+    # Creamos el usuario
     sudo useradd "$usuario"
     echo "${negrita}${verde}Usuario creado: ${normal} $usuario"
 }
@@ -331,6 +374,7 @@ function crear_grupo() {
         return
     fi
 
+    # Creación del grupo
     sudo groupadd "$grupo"
     echo "${negrita}${verde}Grupo creado: ${normal} $grupo"
 }
@@ -340,6 +384,8 @@ function listar_grupos() {
 	clear
     cabecera "Listar grupos del sistema"
 	echo "${negrita}${amarillo}Grupos encontrados en el sistema:${normal}"
+
+    # Listado de los grupos del sistema
     cut -d: -f1 /etc/group | more
 }
 
@@ -359,6 +405,7 @@ function eliminar_grupo() {
     confirmacion=${confirmacion,,}
 
     if [ "$confirmacion" == "s" ]; then
+        # Eliminamos el grupo
         sudo groupdel "$grupo"
         echo "${negrita}${verde}Grupo eliminado: ${normal} $grupo"
     else
@@ -388,6 +435,7 @@ function asignar_usuarios_a_grupo() {
         fi
     done
 
+    # Añadimos los usuarios al grupo
     sudo usermod -aG "$grupo" $usuarios
     echo "${negrita}${verde}Usuarios asignados al grupo: ${normal}$grupo"
 }
@@ -424,7 +472,7 @@ function informacion_sistema() {
     clear
     cabecera "Información del sistema"
     
-    # Verificar si se tienen los permisos de sudo
+    # Verificar si se tienen los permisos de sudo. Es necesario lanzar el script con sudo o estar logueado como root
     if sudo -n true 2>/dev/null; then
         echo ""
         echo "${negrita}${verde}-- Tienes permisos de root para acceder a la información del sistema --${normal}"
