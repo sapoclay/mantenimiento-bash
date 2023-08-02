@@ -1,35 +1,6 @@
 #!/bin/bash
 
-# Vamos a crear un script bash de mantenimiento con las siguientes funciones mediante la interacción del usario que permita;
-# al usuario seleccion un directorio para listar su contenido
-# crear un fichero en un directorio que seleccione el usuario. Indicando también el nombre
-# leer un fichero que indique el usuario
-# editar un fichero. En caso de que no exista se muestra un error
-# copiar un fichero indicado por el usuario de un directorio a otro
-# mover un fichero indicado por el usuario de un directorio a otro
-# eliminar ficheros indicados por el usuario
-# mostrar permisos de un fichero o directorio concreto
-# instalar un paquete determinado (primero hay que buscarlo en los repositorios, y si el paquete existe se instala, sino se muestra un error)
-# matar un proceso seleccionado por el usuario
-# listar los usuarios del sistema
-# crear un usuario
-# desactivar un usuario
-# eliminar un usuario
-# crear un grupo
-# listar los usuarios del sistema
-# eliminar un grupo
-# asignar usuarios a grupos
-# crear usuarios leyendo sus nombres de un archivo de texto. El archivo de texto debe ser indicado por el usuario
-# información del sistema con la siguiente salida:
-# id del vendedor
-# nombre del modelo
-# CPU MHZ
-# Memoria total
-# Memoria libre
-# Arquitectura
-# Versión del kernel
-
-# Colores y estilo para el menú
+# Colores 
 verde=$(tput setaf 2)   # Color verde
 rojo=$(tput setaf 1)     # Color rojo
 amarillo=$(tput setaf 3)   # Color amarillo
