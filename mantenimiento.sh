@@ -423,6 +423,15 @@ function crear_usuarios_desde_archivo() {
 function informacion_sistema() {
     clear
     cabecera "Información del sistema"
+    
+    # Verificar si se tienen los permisos de sudo
+    if sudo -n true 2>/dev/null; then
+        echo "${negrita}${verde}-- Tienes permisos de root para acceder a la información del sistema --${normal}"
+    else
+        echo "${negrita}${rojo}-- Esta tarea requiere permisos de root --${normal}"
+        return
+    fi
+    
     echo ""
     echo "${negrita}${amarillo}- ID del vendedor: ${normal} $(sudo dmidecode -s system-manufacturer)"
     echo ""
@@ -444,7 +453,6 @@ function informacion_sistema() {
     echo ""
     echo "${negrita}${amarillo}- Versión del kernel: ${normal} $(uname -r)"
 }
-
 
 
 # Menú principal
