@@ -32,3 +32,9 @@ Vamos a crear un script bash de mantenimiento con las siguientes funciones media
     * Memoria libre
     * Arquitectura
     * Versión del kernel
+
+## USO
+Una vez descargado el archivo mantenimiento.sh, en una terminal solo hay que escribir:
+``chmod +x mantenimiento.sh``
+Después para ejecutar el archivo, en la misma terminal, y desde la carpeta en la que tengamos guardado el archivo, basta con escribir:
+``./mantenimiento.sh``
