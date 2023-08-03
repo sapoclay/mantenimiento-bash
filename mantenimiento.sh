@@ -63,16 +63,19 @@ function cabecera() {
     echo "${negrita}${verde}==============================="
     echo "  $1"
     echo "===============================${normal}"
+    echo ""
 }
 
 # Función para seleccionar un directorio y listar su contenido
 function listar_contenido_directorio() {
     clear
-    cabecera "Listar contenido de un directorio"
+    cabecera "Listar contenido directorio"
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del directorio: ${normal}" directorio
 
     # Verificar si el directorio existe
     if [[ ! -d "$directorio" ]]; then
+        echo ""
         echo "${negrita}${rojo}El directorio \"$directorio\" no existe. La operación ha sido abortada.${normal}"
         return
     fi
@@ -84,30 +87,36 @@ function listar_contenido_directorio() {
 # Función para crear un fichero con comprobación de existencia de la ruta
 function crear_fichero() {
     clear
-    cabecera "Crear un fichero"
+    cabecera "      Crear un fichero"
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del directorio donde desea crear el fichero: ${normal}" directorio
 
     # Verificar si el directorio existe
     if [[ ! -d "$directorio" ]]; then
+        echo ""
         echo "${negrita}${rojo}El directorio \"$directorio\" no existe. La creación del fichero ha sido abortada.${normal}"
         return
     fi
 
+    echo ""
     read -p "${negrita}${amarillo}Escribe el nombre del fichero: ${normal}" nombre_fichero
 
     # Crea el archivo en el directorio indicado
     touch "$directorio/$nombre_fichero"
+    echo ""
     echo "${negrita}${verde}Fichero creado: ${normal} $directorio/$nombre_fichero"
 }
 
 # Función para leer un fichero indicado por el usuario
 function leer_fichero() {
 	clear
-    cabecera "Leer un fichero"
+    cabecera "      Leer un fichero"
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del fichero que quieres leer: ${normal}" fichero
     if [ -f "$fichero" ]; then
         cat "$fichero"
     else
+        echo ""
         echo "${negrita}${rojo}El fichero no existe.${normal}"
     fi
 }
@@ -115,11 +124,13 @@ function leer_fichero() {
 # Función para editar un fichero indicado por el usuario
 function editar_fichero() {
 	clear
-    cabecera "Editar un fichero"
+    cabecera "     Editar un fichero"
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del fichero que quieres editar: ${normal}" fichero
     if [ -f "$fichero" ]; then
         nano "$fichero"
     else
+        echo ""
         echo "${negrita}${rojo}El fichero no existe.${normal}"
     fi
 }
@@ -127,70 +138,83 @@ function editar_fichero() {
 # Función para copiar un fichero de un directorio a otro
 function copiar_fichero() {
     clear
-    cabecera "Copiar un fichero"
-    read -p "${negrita}${amarillo}Escribe la ruta del fichero que desea copiar: ${normal}" origen
+    cabecera "     Copiar un fichero"
+    echo ""
+    read -p "${negrita}${amarillo}Escribe la ruta del fichero que quieres copiar: ${normal}" origen
 
     # Comprobar si el archivo de origen existe
     if [[ ! -e "$origen" ]]; then
+        echo ""
         echo "${negrita}${rojo}El archivo de origen no existe.${normal}"
         return
     fi
 
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del directorio de destino: ${normal}" destino
 
     # Comprobar si la ruta de destino existe
     if [[ ! -d "$destino" ]]; then
+        echo ""
         echo "${negrita}${rojo}El directorio de destino no existe.${normal}"
         return
     fi
 
     # Copia el archivo en el destino indicado
     cp "$origen" "$destino"
+    echo ""
     echo "${negrita}${verde}Fichero copiado a $destino${normal}"
 }
 
 # Función para mover un fichero de un directorio a otro
 function mover_fichero() {
     clear
-    cabecera "Mover un fichero"
-    read -p "${negrita}${amarillo}Escribe la ruta del fichero que desea mover: ${normal}" origen
+    cabecera "      Mover un fichero"
+    echo ""
+    read -p "${negrita}${amarillo}Escribe la ruta del fichero que quieres mover: ${normal}" origen
 
     # Comprobar si el archivo de origen existe
     if [[ ! -e "$origen" ]]; then
+        echo ""
         echo "${negrita}${rojo}El archivo de origen no existe.${normal}"
         return
     fi
 
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del directorio de destino: ${normal}" destino
 
     # Comprobar si la ruta de destino existe
     if [[ ! -d "$destino" ]]; then
+        echo ""
         echo "${negrita}${rojo}El directorio de destino no existe.${normal}"
         return
     fi
 
     # Con -i se sobreescribe el detino, en caso de existir (sin probar)
     mv -i "$origen" "$destino"
+    echo ""
     echo "${negrita}${verde}Fichero movido a $destino${normal}"
 }
 
 # Función para eliminar ficheros indicados por el usuario
 function eliminar_ficheros() {
 	clear
-    cabecera "Eliminar ficheros"
-    read -p "${negrita}${amarillo}Escribe una lista de ficheros separados por espacio que desea eliminar: ${normal}" ficheros
+    cabecera "     Eliminar ficheros"
+    echo ""
+    read -p "${negrita}${amarillo}Escribe una lista de ficheros separados por espacios que quieras eliminar: ${normal}" ficheros
 
     # Verificar si se ingresaron archivos
     if [ -z "$ficheros" ]; then
-        echo "${negrita}${rojo}No se escribieron nombres de ficheros para eliminar.${normal}"
+        echo "${negrita}${rojo}No se escribieron nombres de ficheros para eliminar. Por ello se cancela la eliminación de ficheros.${normal}"
         return
     fi
 
     # Mostrar la lista de ficheros a eliminar
+    echo ""
     echo "${negrita}${azul}Los siguientes ficheros serán eliminados:${normal}"
     echo "$ficheros"
 
     # Pedir confirmación antes de eliminar
+    echo ""
     read -p "${negrita}${rojo}¿Estás MUY seguro de que quieres eliminar estos ficheros? (S/n): ${normal}" confirmacion
 
     # Convertir la confirmación a minúsculas para hacerla insensible a mayúsculas o minúsculas
@@ -198,7 +222,7 @@ function eliminar_ficheros() {
 
     if [ "$confirmacion" == "s" ]; then
         rm -i $ficheros
-        echo "${negrita}${verde}Ficheros eliminados exitosamente.${normal}"
+        echo "${negrita}${verde}Ficheros eliminados de forma correcta.${normal}"
     else
         echo "${negrita}${rojo}La operación de eliminación fue cancelada.${normal}"
     fi
@@ -207,48 +231,71 @@ function eliminar_ficheros() {
 # Función para mostrar los permisos de un fichero o directorio
 function mostrar_permisos() {
 	clear
-    cabecera "Mostrar permisos de un fichero o directorio"
+    cabecera "      Mostrar permisos"
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del fichero o directorio: ${normal}" ruta
-    
-    # Lista los directorios (no su contenido) en formato largo
-    ls -ld "$ruta"
+
+    # Verificar si la ruta existe
+    if [[ -e "$ruta" ]]; then
+        # Lista los directorios (no su contenido) en formato largo
+        ls -ld "$ruta"
+        break
+    else
+        echo ""
+        echo "${negrita}${rojo}La ruta \"$ruta\" no existe. Inténtalo de nuevo.${normal}"
+    fi
 }
 
 # Función para instalar un paquete determinado si existe en los repositorios
 function instalar_paquete() {
-	clear
-    cabecera "Instalar paquete"
-    read -p "${negrita}${amarillo}Escribe el nombre del paquete que desea instalar: ${normal}" paquete
-    
-    # Redirigir tanto la salida estándar (stdout) como la salida de error (stderr) a /dev/null
-    if apt-cache show "$paquete" &>/dev/null; then
-        sudo apt-get install "$paquete"
-    else
-        echo "${negrita}${rojo}El paquete $paquete no se encuentra en los repositorios, por lo que no se puede instalar${normal}"
-    fi
+    clear
+    cabecera "      Instalar paquete"
+    echo ""
+
+    while true; do
+        read -p "${negrita}${amarillo}Escribe el nombre del paquete que quieras instalar: ${normal}" paquete
+
+        # Verificar si el nombre del paquete está vacío o solo contiene espacios
+        if [[ -z "$paquete" ]]; then
+            echo "${negrita}${rojo}El nombre del paquete no puede estar vacío. Inténtalo de nuevo.${normal}"
+        else
+            # Redirigir tanto la salida estándar (stdout) como la salida de error (stderr) a /dev/null
+            if apt-cache show "$paquete" &>/dev/null; then
+                sudo apt-get install "$paquete"
+                break
+            else
+                echo "${negrita}${rojo}El paquete \"$paquete\" no se encuentra en los repositorios, por lo que no se puede instalar.${normal}"
+                break
+            fi
+        fi
+    done
 }
 
 # Función para matar un proceso seleccionado por el usuario
 function matar_proceso() {
 	clear
-    cabecera "Matar un proceso"
+    cabecera "      Matar un proceso"
     
     # Mostrar los 10 procesos que más recursos consumen
+    echo ""
     echo "${negrita}${amarillo}Los 10 procesos que más recursos consumen:${normal}"
     ps aux --sort=-%cpu | head -n 11
 
     # Mostrar los procesos que están colgados
+    echo ""
     echo "${negrita}${amarillo}Los procesos que están colgados:${normal}"
     ps aux | awk '$8 ~ /D/ { print }'
 
     # Pedir al usuario que indique el proceso a matar
-    read -p "${negrita}${amarillo}Escribe el nombre o PID del proceso que desea matar: ${normal}" proceso
+    read -p "${negrita}${amarillo}Escribe el nombre o PID del proceso que quieras matar: ${normal}" proceso
 
     # Mostrar el proceso a matar
+    echo ""
     echo "${negrita}${amarillo}Proceso a matar: ${normal} $proceso"
 
     # Pedir confirmación antes de matar
-    read -p "${negrita}${rojo}¿Está seguro de que desea matar este proceso? (S/n): ${normal}" confirmacion
+    echo ""
+    read -p "${negrita}${rojo}¿Estás seguro de que quieres matar este proceso? (S/n): ${normal}" confirmacion
 
     # Convertir la confirmación a minúsculas para hacerla insensible a mayúsculas o minúsculas
     confirmacion=${confirmacion,,}
@@ -256,8 +303,10 @@ function matar_proceso() {
     if [ "$confirmacion" == "s" ]; then
         # Enviar la señal SIGTERM (15) al proceso para terminarlo adecuadamente
         kill -15 $proceso
+        echo ""
         echo "${negrita}${verde}Proceso terminado: ${normal} $proceso"
     else
+        echo ""
         echo "${negrita}${rojo}La operación de terminación fue cancelada.${normal}"
     fi
 }
@@ -273,39 +322,47 @@ function listar_usuarios() {
 # Función para crear un usuario
 function crear_usuario() {
     clear
-    cabecera "Crear un usuario"
+    cabecera "     Crear usuario"
+    echo ""
     read -p "${negrita}${amarillo}Escribe el nombre del usuario que quieres crear: ${normal}" usuario
 
     # Verificar si el usuario ya existe en el sistema
     if getent passwd "$usuario" >/dev/null; then
+        echo ""
         echo "${negrita}${rojo}El usuario \"$usuario\" ya existe en el sistema. La creación del usuario ha sido abortada.${normal}"
         return
     fi
 
     # Creamos el usuario
     sudo useradd "$usuario"
+    echo ""
     echo "${negrita}${verde}Usuario creado: ${normal} $usuario"
 }
 
 # Función para desactivar un usuario
 function desactivar_usuario() {
 	clear
-    cabecera "Desactivar un usuario"
+    cabecera "      Desactivar usuario"
+    echo ""
     read -p "${negrita}${amarillo}Escribe el nombre del usuario que quieres desactivar: ${normal}" usuario
 
     # Mostrar el nombre del usuario a desactivar
+    echo ""
     echo "${negrita}${amarillo}Usuario a desactivar: ${normal} $usuario"
 
     # Pedir confirmación antes de desactivar
-    read -p "${negrita}${rojo}¿Está seguro de que desea desactivar este usuario? (S/n): ${normal}" confirmacion
+    echo ""
+    read -p "${negrita}${rojo}¿Estás seguro de que quieres desactivar este usuario? (S/n): ${normal}" confirmacion
 
     # Convertir la confirmación a minúsculas para hacerla insensible a mayúsculas o minúsculas
     confirmacion=${confirmacion,,}
 
     if [ "$confirmacion" == "s" ]; then
         sudo usermod -L "$usuario"
+        echo ""
         echo "${negrita}${verde}Usuario desactivado: ${normal} $usuario"
     else
+        echo ""
         echo "${negrita}${rojo}La operación de desactivación fue cancelada.${normal}"
     fi
 }
@@ -313,22 +370,27 @@ function desactivar_usuario() {
 # Función para eliminar un usuario
 function eliminar_usuario() {
 	clear
-    cabecera "Eliminar un usuario"
+    cabecera "      Eliminar usuario"
+    echo ""
     read -p "${negrita}${amarillo}Escribe el nombre del usuario que quieres eliminar: ${normal}" usuario
 
     # Mostrar el nombre del usuario a eliminar
+    echo ""
     echo "${negrita}${amarillo}Usuario a eliminar: ${normal} $usuario"
 
     # Pedir confirmación antes de eliminar
-    read -p "${negrita}${rojo}¿Está seguro de que desea eliminar este usuario? (S/n): ${normal}" confirmacion
+    echo ""
+    read -p "${negrita}${rojo}¿Estás seguro de que quieres eliminar este usuario? (S/n): ${normal}" confirmacion
 
     # Convertir la confirmación a minúsculas para hacerla insensible a mayúsculas o minúsculas
     confirmacion=${confirmacion,,}
 
     if [ "$confirmacion" == "s" ]; then
         sudo userdel "$usuario"
+        echo ""
         echo "${negrita}${verde}Usuario eliminado: ${normal} $usuario"
     else
+        echo ""
         echo "${negrita}${rojo}La operación de eliminación fue cancelada.${normal}"
     fi
 }
@@ -336,24 +398,27 @@ function eliminar_usuario() {
 # Función para crear un grupo
 function crear_grupo() {
     clear
-    cabecera "Crear un grupo"
+    cabecera "      Crear grupo"
+    echo ""
     read -p "${negrita}${amarillo}Escribe el nombre del nuevo grupo: ${normal}" grupo
 
     # Verificar si el grupo ya existe en el sistema
     if getent group "$grupo" >/dev/null; then
+        echo ""
         echo "${negrita}${rojo}El grupo \"$grupo\" ya existe en el sistema. La creación del grupo ha sido cancelada.${normal}"
         return
     fi
 
     # Creación del grupo
     sudo groupadd "$grupo"
+    echo ""
     echo "${negrita}${verde}Grupo creado: ${normal} $grupo"
 }
 
 # Función para listar los grupos del sistema
 function listar_grupos() {
 	clear
-    cabecera "Listar grupos del sistema"
+    cabecera "      Listar grupos"
 	echo "${negrita}${amarillo}Grupos encontrados en el sistema:${normal}"
 
     # Listado de los grupos del sistema
@@ -363,14 +428,17 @@ function listar_grupos() {
 # Función para eliminar un grupo
 function eliminar_grupo() {
 	clear
-    cabecera "Eliminar un grupo"
+    cabecera "      Eliminar grupo"
+    echo ""
     read -p "${negrita}${amarillo}Escribe el nombre del grupo que quieras eliminar: ${normal}" grupo
 
     # Mostrar el nombre del grupo a eliminar
+    echo ""
     echo "${negrita}${amarillo}Grupo a eliminar: ${normal} $grupo"
 
     # Pedir confirmación antes de eliminar
-    read -p "${negrita}${rojo}¿Está seguro de que desea eliminar este grupo? (S/n): ${normal}" confirmacion
+    echo ""
+    read -p "${negrita}${rojo}¿Estás seguro de que quieres eliminar este grupo? (S/n): ${normal}" confirmacion
 
     # Convertir la confirmación a minúsculas para hacerla insensible a mayúsculas o minúsculas
     confirmacion=${confirmacion,,}
@@ -378,8 +446,10 @@ function eliminar_grupo() {
     if [ "$confirmacion" == "s" ]; then
         # Eliminamos el grupo
         sudo groupdel "$grupo"
+        echo ""
         echo "${negrita}${verde}Grupo eliminado: ${normal} $grupo"
     else
+        echo ""
         echo "${negrita}${rojo}La operación de eliminación fue cancelada.${normal}"
     fi
 }
@@ -388,19 +458,23 @@ function eliminar_grupo() {
 function asignar_usuarios_a_grupo() {
     clear
     cabecera "Asignar usuarios a un grupo"
-    read -p "${negrita}${amarillo}Escribe el nombre del grupo: ${normal}" grupo
+    echo ""
+    read -p "${negrita}${amarillo}Escribe el nombre del grupo al que añadir los usuarios: ${normal}" grupo
 
     # Verificar si el grupo existe en el sistema
     if ! getent group "$grupo" >/dev/null; then
+        echo ""
         echo "${negrita}${rojo}El grupo \"$grupo\" no existe en el sistema. La asignación de usuarios ha sido abortada.${normal}"
         return
     fi
 
-    read -p "${negrita}${amarillo}Escribe una lista de usuarios separados por espacio que quieras añadir al grupo: ${normal}" usuarios
+    echo ""
+    read -p "${negrita}${amarillo}Escribe una lista de usuarios, separados por espacios, que quieras añadir al grupo: ${normal}" usuarios
 
     # Verificar si todos los usuarios existen en el sistema
     for usuario in $usuarios; do
         if ! getent passwd "$usuario" >/dev/null; then
+            echo ""
             echo "${negrita}${rojo}El usuario \"$usuario\" no existe en el sistema. La asignación de usuarios ha sido abortada.${normal}"
             return
         fi
@@ -408,6 +482,7 @@ function asignar_usuarios_a_grupo() {
 
     # Añadimos los usuarios al grupo
     sudo usermod -aG "$grupo" $usuarios
+    echo ""
     echo "${negrita}${verde}Usuarios asignados al grupo: ${normal}$grupo"
 }
 
@@ -415,10 +490,12 @@ function asignar_usuarios_a_grupo() {
 function crear_usuarios_desde_archivo() {
     clear
     cabecera "Crear usuarios desde archivo"
+    echo ""
     read -p "${negrita}${amarillo}Escribe la ruta del archivo de texto con los nombres de usuario: ${normal}" archivo
 
     # Verificar si el archivo existe
     if [ ! -f "$archivo" ]; then
+        echo ""
         echo "${negrita}${rojo}El archivo \"$archivo\" no existe. La creación de usuarios ha sido abortada.${normal}"
         return
     fi
@@ -427,21 +504,24 @@ function crear_usuarios_desde_archivo() {
     do
         # Verificar si el usuario ya existe en el sistema
         if getent passwd "$usuario" >/dev/null; then
+            echo ""
             echo "${negrita}${rojo}El usuario \"$usuario\" ya existe en el sistema. La creación de usuarios ha sido abortada.${normal}"
             return
         fi
 
         sudo useradd "$usuario"
+        echo ""
         echo "${negrita}${verde}Usuario creado: ${normal} $usuario"
     done < "$archivo"
 
+    echo ""
     echo "${negrita}${verde}Creación de usuarios desde archivo completada.${normal}"
 }
 
 # Función para mostrar información del sistema
 function informacion_sistema() {
     clear
-    cabecera "Información del sistema"
+    cabecera "   Información del sistema"
     
     # Verificar si se tienen los permisos de sudo. Es necesario lanzar el script con sudo o estar logueado como root
     if sudo -n true 2>/dev/null; then
@@ -482,7 +562,7 @@ function informacion_sistema() {
 while true; do
 	clear
     echo "${negrita}${verde}====================================="
-    echo "         Menú de Mantenimiento       "
+    echo "    Menú de administración básico       "
     echo "=====================================${normal}"
     echo "${negrita}${rojo}1.${normal} Listar contenido de un directorio"
     echo "${negrita}${rojo}2.${normal} Crear un fichero"
@@ -504,8 +584,10 @@ while true; do
     echo "${negrita}${rojo}18.${normal} Asignar usuarios a grupos"
     echo "${negrita}${rojo}19.${normal} Crear usuarios desde un archivo"
     echo "${negrita}${rojo}20.${normal} Información del sistema"
+    echo ""
     echo "${negrita}${rojo}0.${normal} Salir"
     echo ""
+    echo "${negrita}${verde}=====================================${normal}"
     read -p "${negrita}${amarillo}Selecciona una opción: ${normal}" opcion
 
     case $opcion in
@@ -524,12 +606,12 @@ while true; do
         13) desactivar_usuario ;;
         14) eliminar_usuario ;;
         15) crear_grupo ;;
-	 16) listar_grupos ;;
+		16) listar_grupos ;;
         17) eliminar_grupo ;;
         18) asignar_usuarios_a_grupo ;;
         19) crear_usuarios_desde_archivo ;;
         20) informacion_sistema ;;
-        0) echo "${negrita}${azul}Saliendo...${normal}"; exit 0 ;;
+        0) echo "" ; echo "${negrita}${azul}Saliendo...${normal}"; echo "" ; exit 0 ;;
         *) echo "${negrita}${rojo}Opción inválida. Intentalo de nuevo.${normal}" ;;
     esac
 
