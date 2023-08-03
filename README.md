@@ -2,7 +2,7 @@
 
 Este es un pequeño script en bash para realizar operaciones básicas de mantenimiento en equipo con LinuX.
 
-![menu-mantenimiento-bash](https://github.com/sapoclay/mantenimiento-bash/assets/6242827/31cc542e-959b-4185-b088-b063534b7061)
+![menu-mantenimiento-bash](https://github.com/sapoclay/mantenimiento-bash/assets/6242827/980ea2cd-8964-4845-af27-b6ed21482433)
 
 Vamos a crear un script bash de mantenimiento con las siguientes funciones mediante la interacción del usario que permita;
 - Seleccionar un directorio para listar su contenido
